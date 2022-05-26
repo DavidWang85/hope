@@ -1,0 +1,5 @@
+@import "~bootstrap/scss/functions"; // 載入function
+@import "./helpers/variables"; // 載入變數
+@import "~bootstrap/scss/bootstrap"; // 匯入bootstrap
+@import "./styles/main"; //自己寫的變數
+@import "./styles/frontcart.scss"; //購物車
