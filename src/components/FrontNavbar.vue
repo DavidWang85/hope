@@ -21,7 +21,7 @@
         <ul class="navbar-nav">
           <li class="nav-item">
             <router-link class="nav-link ps-0" to="/products"
-              >服務費用</router-link
+              >服務總覽</router-link
             >
           </li>
           <li class="nav-item">

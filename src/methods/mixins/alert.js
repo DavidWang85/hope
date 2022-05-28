@@ -50,11 +50,22 @@ export default {
         icon: "success",
       });
     },
-    // 訂單建立完成
-    alertCreateOrder() {
+    //購物車沒東西
+    alertRemindCart() {
       Swal.fire({
-        title: "訂單建立完成",
-        text: "期待與你/妳的相遇",
+        title: `購物車沒商品喔`,
+        text: `趕快來選擇最適合的服務吧`,
+        timer: 1500, //倒數計時
+        showConfirmButton: false,
+        // color: "#663224",
+        icon: "warning",
+      });
+    },
+    // 訂單建立完成
+    alertCreateOrder(number, name, pay, money) {
+      Swal.fire({
+        title: `訂單建立完成`,
+        html: `訂單編號：${number}<br>訂購人：${name}<br>付款方式：${pay}<br>金額：${money}`,
         showConfirmButton: true,
         // color: "#663224",
         icon: "success",

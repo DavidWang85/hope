@@ -66,9 +66,19 @@
                   type="button"
                   class="btn btn-outline-dark btn-sm"
                   @click="removeCartItem(item.id, item.product.title)"
-                  :disabled="isLoadingItem === item.id"
+                  :disabled="isLoadingLocal === item.id"
                 >
-                  <i class="bi bi-trash3-fill"></i>
+                  <i
+                    class="bi bi-trash3-fill"
+                    v-show="isLoadingLocal !== item.id"
+                  ></i>
+                  <div
+                    class="spinner-grow spinner-grow-sm text-primary"
+                    role="status"
+                    v-if="isLoadingLocal === item.id"
+                  >
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
                 </button>
               </th>
               <td>
@@ -93,7 +103,7 @@
                       class="form-select"
                       v-model="item.qty"
                       @change="updateCartItem(item)"
-                      :disabled="isLoadingItem === item.id"
+                      :disabled="isLoadingLocal === item.id"
                     >
                       <option
                         :value="num"
@@ -142,10 +152,9 @@
             :class="{ disabled: cartData.carts.length === 0 }"
             class="btn btn-primary"
             type="button"
+            @click="goCheckOut"
           >
-            <router-link to="/checkout" class="text-light text-decoration-none"
-              >下一步</router-link
-            >
+            下一步
           </button>
         </div>
       </div>
@@ -155,12 +164,14 @@
 
 <script>
 import alert from "@/methods/mixins/alert";
+import emitter from "@/methods/emitter";
 
 export default {
   data() {
     return {
       isLoading: false,
       fullPage: true,
+      isLoadingLocal: false,
       isLoadingItem: "",
       products: [],
       cartData: {
@@ -175,24 +186,33 @@ export default {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
       this.$http.get(url).then((res) => {
         this.cartData = res.data.data;
+        emitter.emit("get-cart");
+        this.checkCart();
         this.isLoading = false;
       });
     },
+    getCartNoLoading() {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+      this.$http.get(url).then((res) => {
+        emitter.emit("get-cart");
+        this.cartData = res.data.data;
+      });
+    },
     removeCartItem(id, name) {
-      this.isLoadingItem = id;
+      this.isLoadingLocal = id;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`;
       this.$http.delete(url).then(() => {
-        this.getCart();
-        this.isLoadingItem = "";
+        this.isLoadingLocal = false;
+        this.getCartNoLoading();
         this.alertRemoveCartItem(name);
       });
     },
     removeAllCarts() {
-      this.isLoadingItem = "clear";
+      this.isLoadingLocal = true;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/carts`;
       this.$http.delete(url).then(() => {
-        this.getCart();
-        this.isLoadingItem = "";
+        this.isLoadingLocal = false;
+        this.getCartNoLoading();
         this.alertRemoveAllCart();
       });
     },
@@ -201,17 +221,27 @@ export default {
         product_id: item.id,
         qty: item.qty,
       };
-      this.isLoadingItem = item.id;
+      this.isLoadingLocal = item.id;
       this.$http
         .put(
           `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`,
           { data }
         )
         .then(() => {
-          this.getCart();
-          this.isLoadingItem = "";
+          this.isLoadingLocal = false;
+          this.getCartNoLoading();
           this.alertUpdateCartItem();
         });
+    },
+    goCheckOut() {
+      this.$router.push("/checkout");
+    },
+    // 確認購物車有東西
+    checkCart() {
+      if (this.cartData.carts.length === 0) {
+        this.alertRemindCart();
+        this.$router.push("/products");
+      }
     },
   },
   mounted() {

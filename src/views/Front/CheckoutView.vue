@@ -111,7 +111,7 @@
         <div class="col-lg-6 col-md-12">
           <h5 class="text-center text-primary mb-3">填寫資料</h5>
           <div class="row justify-content-center">
-            <v-form ref="form" v-slot="{ errors }" @submit="createOrder">
+            <v-form ref="form" v-slot="{ errors }" @submit="createOrder()">
               <div class="mb-3">
                 <label for="email" class="form-label fw-bold">Email</label>
                 <v-field
@@ -187,6 +187,29 @@
               </div>
 
               <div class="mb-3">
+                <label for="select" class="form-label fw-bold">付款方式</label>
+                <v-field
+                  as="select"
+                  id="select"
+                  name="付款方式"
+                  class="form-select"
+                  v-model="form.user.pay"
+                  :class="{ 'is-invalid': errors['付款方式'] }"
+                  rules="required"
+                >
+                  <option selected>選擇您的付款方式</option>
+                  <option value="現場付款">現場付款</option>
+                  <option value="信用卡付費">信用卡付費</option>
+                  <option value="信用卡分期付款">信用卡分期付款</option>
+                  <option value="銀行轉帳">銀行轉帳</option>
+                </v-field>
+                <error-message
+                  name="付款方式"
+                  class="invalid-feedback"
+                ></error-message>
+              </div>
+
+              <div class="mb-3">
                 <label for="message" class="form-label fw-bold">留言</label>
                 <textarea
                   id="message"
@@ -227,6 +250,7 @@
 
 <script>
 import alert from "@/methods/mixins/alert";
+import emitter from "@/methods/emitter";
 
 export default {
   data() {
@@ -239,6 +263,7 @@ export default {
           email: "",
           tel: "",
           address: "",
+          pay: "",
         },
         message: "",
       },
@@ -249,6 +274,9 @@ export default {
       cartData: {
         carts: [],
       },
+      orderData: {
+        orderId: "",
+      },
     };
   },
   mixins: [alert],
@@ -258,6 +286,7 @@ export default {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
       this.$http.get(url).then((res) => {
         this.cartData = res.data.data;
+        this.checkCart();
         this.isLoading = false;
       });
     },
@@ -273,8 +302,9 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.alertCouponSuccess();
-            this.isLoading = false;
             this.couponTotal = res.data.data.final_total;
+            this.getCart();
+            this.isLoading = false;
           } else {
             this.alertCouponFalse();
             this.isLoading = false;
@@ -287,17 +317,38 @@ export default {
           this.coupon = "";
         });
     },
+    //清空優惠券
+    resetCoupon() {},
+    // 確認購物車有東西
+    checkCart() {
+      if (this.cartData.carts.length === 0) {
+        this.alertRemindCart();
+        this.$router.push("/products");
+      }
+    },
     // 送出表單
     createOrder() {
       const order = this.form;
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`;
       this.$http
         .post(url, { data: order })
         .then((res) => {
           console.log("上傳成功", res);
-          this.alertCreateOrder();
           this.$refs.form.resetForm();
-          this.getCart();
+          // 1.存入訂單id
+          this.orderData.orderId = res.data.orderId;
+          // 2.完成付款
+          const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${this.orderData.orderId}`;
+          this.$http.post(url).then(() => {
+            this.alertCreateOrder(
+              this.orderData.orderId,
+              this.form.user.name,
+              this.form.user.pay,
+              this.cartData.final_total
+            );
+          });
+          emitter.emit("get-cart");
+          this.$router.push(`/complete`);
         })
         .catch((err) => {
           console.dir(err);
