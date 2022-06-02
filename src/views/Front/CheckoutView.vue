@@ -197,7 +197,7 @@
                   :class="{ 'is-invalid': errors['付款方式'] }"
                   rules="required"
                 >
-                  <option selected>選擇您的付款方式</option>
+                  <option selected disabled>選擇您的付款方式</option>
                   <option value="現場付款">現場付款</option>
                   <option value="信用卡付費">信用卡付費</option>
                   <option value="信用卡分期付款">信用卡分期付款</option>

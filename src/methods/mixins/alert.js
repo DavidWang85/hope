@@ -94,5 +94,27 @@ export default {
         icon: "error",
       });
     },
+    // 加入典藏
+    alertAddToCollect(name) {
+      Swal.fire({
+        toast: true, //啟用吐司框
+        title: `商品 ${name} 已加入收藏`,
+        position: "top-end", //位置
+        timer: 2000, //倒數計時
+        showConfirmButton: false,
+        icon: "success",
+      });
+    },
+    // 移除典藏
+    alertRemoveCollect(name) {
+      Swal.fire({
+        toast: true, //啟用吐司框
+        title: `商品 ${name} 已移除收藏`,
+        position: "top-end", //位置
+        timer: 1500, //倒數計時
+        showConfirmButton: false,
+        icon: "info",
+      });
+    },
   },
 };

@@ -31,8 +31,11 @@
           </li>
         </ul>
       </div>
-      <div class="d-flex">
-        <router-link class="position-relative px-1 text-light" to="/cart">
+      <div class="d-flex align-items-center">
+        <router-link class="me-4 align-text-bottom text-light" to="/collect">
+          <i class="bi bi-chat-square-heart"></i>
+        </router-link>
+        <router-link class="position-relative text-light" to="/cart">
           <i class="bi bi-bag"
             ><span
               class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"

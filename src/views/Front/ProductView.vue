@@ -8,100 +8,114 @@
       </div>
     </div>
   </LoadingPlugin>
-  <div class="container page-top">
-    <!-- <div
-      style="
-        min-height: 400px;
-        background-attachment: fixed;
-        background-position: center center;
-        background-repeat: no-repeat;
-      "
-      :style="{ background: `url(${product.imageUrl})` }"
-    ></div> -->
-    <img class="w-100 heightLimit1 img-cover" :src="product.imageUrl" alt="" />
-    <div class="row justify-content-between mt-4 mb-7">
-      <div class="col-md-7">
-        <h2 class="mb-0">{{ product.title }}</h2>
-        <p class="fw-bold">NT${{ product.price }}</p>
-        <p>{{ product.content }}</p>
-        <div class="my-4">
-          <img
-            v-for="(img, index) in product.imagesUrl"
-            :key="index + '123'"
-            :src="img"
-            alt=""
-            class="img-fluid mt-4"
-          />
+  <div class="pages-banner">
+    <img
+      src="https://images.unsplash.com/photo-1619869195642-ad671ace75a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+      alt=""
+    />
+    <h2 class="pages-banner-title">服務內容詳情</h2>
+  </div>
+  <div class="container pages-top">
+    <div class="row d-flex pb-4 align-items-center">
+      <div class="col-6">
+        <img class="img-cover w-100" :src="product.imageUrl" alt="" />
+      </div>
+      <div class="col-6">
+        <h3 class="mb-4 fs-1 text-primary p-0">{{ product.title }}</h3>
+        <div class="card-text d-flex align-items-center">
+          <p class="text-primary fs-3 me-4">NT$ {{ product.price }}</p>
+          <p class="text-muted fs-4 text-decoration-line-through">
+            NT$ {{ product.origin_price }}
+          </p>
         </div>
-        <div
-          class="accordion border border-bottom border-top-0 border-start-0 border-end-0 mb-3"
-          id="accordionExample"
-        >
-          <div class="card border-0">
-            <div
-              class="card-header py-4 bg-white border border-bottom-0 border-top border-start-0 border-end-0"
-              id="headingOne"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseOne"
+        <p class="mb-4 col-6">{{ product.description }}</p>
+        <div class="row">
+          <div class="col-6">
+            <div class="input-group">
+              <select id="" class="form-select" v-model="product.qty">
+                <option
+                  :value="num"
+                  v-for="num in 20"
+                  :key="`${num}-${product.id}`"
+                  :selected="product.qty === num"
+                >
+                  {{ num }}
+                </option>
+              </select>
+              <span class="input-group-text" id="basic-addon2">{{
+                product.unit
+              }}</span>
+            </div>
+          </div>
+          <div class="col-6">
+            <button
+              @click="addToCart(product.id, product.title, product.qty)"
+              class="btn btn-primary px-lg-4 me-2"
+              type="button"
             >
               <div
-                class="d-flex justify-content-between align-items-center pe-1"
+                class="spinner-border spinner-border-sm text-secondary"
+                v-show="isLoadingItem === product.id"
+                role="status"
               >
-                <h4 class="mb-0">Lorem ipsum</h4>
-                <i class="fas fa-minus"></i>
+                <span class="visually-hidden">Loading...</span>
               </div>
-            </div>
-            <div
-              id="collapseOne"
-              class="collapse show"
-              aria-labelledby="headingOne"
-              data-bs-parent="#accordionExample"
-            >
-              <div class="card-body pb-5">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                justo duo dolores et ea
-              </div>
-            </div>
+              加入購物車
+            </button>
+            <button class="btn btn-outline-success px-lg-3 m-0" type="btn">
+              <i class="bi bi-chat-square-heart"></i>先收藏
+            </button>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="input-group mb-3 border mt-3">
-          <div class="input-group-prepend">
-            <button
-              class="btn btn-outline-dark rounded-0 border-0 py-3"
-              type="button"
-              id="button-addon1"
+    </div>
+    <div class="row mt-5">
+      <div class="mb-4">
+        <div class="front-product-title">
+          <h4 class="text-center fw-bold border-bottom border-primary">
+            服務介紹
+          </h4>
+        </div>
+        <div class="mb-4">
+          <p>
+            {{ product.content }}
+          </p>
+        </div>
+      </div>
+      <div class="mb-4">
+        <div class="front-product-title">
+          <h4 class="text-center fw-bold border-bottom border-primary">
+            注意須知
+          </h4>
+        </div>
+        <ul class="mb-4">
+          <li>ajdinf</li>
+          <li>asdjifa</li>
+          <li>ajsifa</li>
+          <li>asfjiaf</li>
+        </ul>
+      </div>
+      <div class="mb-4">
+        <div class="front-product-title">
+          <h4 class="text-center fw-bold border-bottom border-primary">
+            更多圖示
+          </h4>
+        </div>
+        <div v-if="product.imagesUrl" class="product-images">
+          <div class="row">
+            <div
+              class="col-4"
+              v-for="(img, index) in product.imagesUrl"
+              :key="index"
             >
-              <i class="fas fa-minus"></i>
-            </button>
-          </div>
-          <input
-            type="text"
-            class="form-control border-0 text-center my-auto shadow-none"
-            placeholder=""
-            aria-label="Example text with button addon"
-            aria-describedby="button-addon1"
-            value="1"
-          />
-          <div class="input-group-append">
-            <button
-              class="btn btn-outline-dark rounded-0 border-0 py-3"
-              type="button"
-              id="button-addon2"
-            >
-              <i class="fas fa-plus"></i>
-            </button>
+              <img :src="img" class="img-fluid mt-4 d-block" alt="" />
+            </div>
           </div>
         </div>
-        <a
-          href="#"
-          @click.prevent="addToCart"
-          class="btn btn-dark btn-block rounded-0 py-3"
-          >加入購物車</a
-        >
+        <div v-else class="text-center">
+          很抱歉！<span class="text-primary">{{ product.title }}</span>
+          沒有提供更多圖示
+        </div>
       </div>
     </div>
   </div>
@@ -109,16 +123,19 @@
 
 <script>
 import emitter from "@/methods/emitter";
+import alert from "@/methods/mixins/alert";
 
 export default {
   data() {
     return {
       product: [],
       isLoading: false,
+      isLoadingItem: false,
       fullPage: true,
       id: "",
     };
   },
+  mixins: [alert],
   methods: {
     getProduct() {
       this.isLoading = true;
@@ -126,18 +143,30 @@ export default {
       this.$http.get(url).then((res) => {
         console.log(res);
         this.product = res.data.product;
+        this.getCart();
         this.isLoading = false;
-        console.log(this.product);
       });
     },
-    addToCart() {
+    getCart() {
+      this.isLoading = true;
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      const data = {
-        product_id: this.id,
-        qty: 1,
-      };
-      this.$http.post(url, { data }).then(() => {
+      this.$http.get(url).then((res) => {
+        this.cartData = res.data.data;
         emitter.emit("get-cart");
+        this.isLoading = false;
+      });
+    },
+    addToCart(id, name, qty = 1) {
+      this.isLoadingItem = id;
+      const data = {
+        product_id: id,
+        qty,
+      };
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+      this.$http.post(url, { data }).then(() => {
+        this.getCart();
+        this.alertAddToCart(name);
+        this.isLoadingItem = false;
       });
     },
   },

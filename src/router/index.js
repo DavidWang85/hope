@@ -29,6 +29,10 @@ const routes = [
         path: "complete",
         component: () => import("../views/Front/CompleteView.vue"),
       },
+      {
+        path: "collect",
+        component: () => import("../views/Front/CollectView.vue"),
+      },
     ],
   },
 ];
