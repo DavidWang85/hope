@@ -3,6 +3,7 @@
   <router-view />
   <FrontFooter></FrontFooter>
   <ClickToTop></ClickToTop>
+  <div id="fb-root"></div>
 </template>
 
 <script>
