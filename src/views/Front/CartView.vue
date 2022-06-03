@@ -90,7 +90,9 @@
                 />
               </td>
               <td>
-                {{ item.product.title }}
+                <router-link :to="`/product/${item.product.id}`">
+                  {{ item.product.title }}
+                </router-link>
               </td>
               <td>NT$ {{ item.product.price }}</td>
               <td class="align-center">

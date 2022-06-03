@@ -21,7 +21,15 @@
         <img class="img-cover w-100" :src="product.imageUrl" alt="" />
       </div>
       <div class="col-6">
-        <h3 class="mb-4 fs-1 text-primary p-0">{{ product.title }}</h3>
+        <h3 class="mb-4 fs-1 text-primary p-0">
+          {{ product.title
+          }}<span v-if="collect.includes(product.id)"
+            ><i class="bi bi-chat-square-heart-fill text-danger ms-3"></i
+          ></span>
+          <span v-else
+            ><i class="bi bi-chat-square-heart-fill text-dark ms-3"></i
+          ></span>
+        </h3>
         <div class="card-text d-flex align-items-center">
           <p class="text-primary fs-3 me-4">NT$ {{ product.price }}</p>
           <p class="text-muted fs-4 text-decoration-line-through">
@@ -62,7 +70,11 @@
               </div>
               加入購物車
             </button>
-            <button class="btn btn-outline-success px-lg-3 m-0" type="btn">
+            <button
+              @click="toggleCollect(product.id, product.title)"
+              class="btn btn-outline-success px-lg-3 m-0"
+              type="btn"
+            >
               <i class="bi bi-chat-square-heart"></i>先收藏
             </button>
           </div>
@@ -133,6 +145,7 @@ export default {
       isLoadingItem: false,
       fullPage: true,
       id: "",
+      collect: JSON.parse(localStorage.getItem("collect")) || [],
     };
   },
   mixins: [alert],
@@ -168,6 +181,16 @@ export default {
         this.alertAddToCart(name);
         this.isLoadingItem = false;
       });
+    },
+    toggleCollect(id, name) {
+      const collectIndex = this.collect.findIndex((item) => item === id);
+      if (collectIndex === -1) {
+        this.collect.push(id);
+        this.alertAddToCollect(name);
+      } else {
+        this.collect.splice(collectIndex, 1);
+        this.alertRemoveCollect(name);
+      }
     },
   },
   mounted() {

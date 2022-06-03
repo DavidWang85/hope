@@ -191,6 +191,7 @@ export default {
   mixins: [alert],
   methods: {
     getProducts(page = 1, category) {
+      this.isLoading = true;
       let url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/?page=${page}`;
       if (category) {
         url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/?category=${category}`;
@@ -201,6 +202,7 @@ export default {
       this.$http.get(url).then((res) => {
         this.products = res.data.products;
         this.pagination = res.data.pagination;
+        this.isLoading = false;
       });
     },
     getCart() {
