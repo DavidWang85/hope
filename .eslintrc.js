@@ -8,6 +8,9 @@ module.exports = {
     "eslint:recommended",
     "plugin:prettier/recommended",
   ],
+  globals: {
+    FB: true,
+  },
   parserOptions: {
     parser: "@babel/eslint-parser",
   },
