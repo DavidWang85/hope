@@ -12,31 +12,39 @@
 import FrontNavbar from "@/components/FrontNavbar.vue";
 import FrontFooter from "@/components/FrontFooter.vue";
 import ClickToTop from "@/components/ClickToTop.vue";
-var chatbox = document.getElementById("fb-customer-chat");
-chatbox.setAttribute("page_id", `${process.env.VUE_APP_FB_ID}`);
-chatbox.setAttribute("attribution", "biz_inbox");
-window.fbAsyncInit = function () {
-  FB.init({
-    xfbml: true,
-    version: "v14.0",
-  });
-};
-
-(function (d, s, id) {
-  var js,
-    fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s);
-  js.id = id;
-  js.src = "https://connect.facebook.net/zh_TW/sdk/xfbml.customerchat.js";
-  fjs.parentNode.insertBefore(js, fjs);
-})(document, "script", "facebook-jssdk");
+// import $ from "jquery";
 
 export default {
+  methods: {
+    init() {
+      window.fbAsyncInit = function () {
+        FB.init({
+          xfbml: true,
+          version: "v14.0",
+        });
+      };
+
+      (function (d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/zh_TW/sdk/xfbml.customerchat.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    },
+  },
   components: {
     FrontNavbar,
     FrontFooter,
     ClickToTop,
+  },
+  mounted() {
+    const chatbox = document.getElementById("fb-customer-chat");
+    chatbox.setAttribute("page_id", `${process.env.VUE_APP_FB_ID}`);
+    chatbox.setAttribute("attribution", "biz_inbox");
+    this.init();
   },
 };
 </script>
