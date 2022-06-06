@@ -16,7 +16,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <router-link class="navbar-brand" to="/">
-          <h1 class="text-stress fw-bold">耆望</h1>
+          <h1 class="title-head text-stress fw-bold">耆望</h1>
         </router-link>
         <ul class="navbar-nav">
           <li class="nav-item">

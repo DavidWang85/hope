@@ -12,7 +12,6 @@
 import FrontNavbar from "@/components/FrontNavbar.vue";
 import FrontFooter from "@/components/FrontFooter.vue";
 import ClickToTop from "@/components/ClickToTop.vue";
-// import $ from "jquery";
 
 export default {
   methods: {
@@ -42,10 +41,15 @@ export default {
     ClickToTop,
   },
   mounted() {
-    const chatbox = document.getElementById("fb-customer-chat");
-    chatbox.setAttribute("page_id", `${process.env.VUE_APP_FB_ID}`);
-    chatbox.setAttribute("attribution", "biz_inbox");
-    this.init();
+    // 要用網頁時再開啟
+    // const chatbox = document.getElementById("fb-customer-chat");
+    // chatbox.setAttribute("page_id", `${process.env.VUE_APP_FB_ID}`);
+    // chatbox.setAttribute("attribution", "biz_inbox");
+    // this.init();
   },
 };
 </script>
+
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap");
+</style>
